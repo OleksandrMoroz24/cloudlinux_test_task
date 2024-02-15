@@ -98,3 +98,13 @@ deactivate
 ```
 
 This will return you to the global Python environment.
+
+## Example of usage
+### scan command
+![image](https://github.com/OleksandrMoroz24/cloudlinux_test_task/assets/140017557/329b8551-a4cb-4ca4-8cca-d98435f377b0)
+![image](https://github.com/OleksandrMoroz24/cloudlinux_test_task/assets/140017557/86ed064c-90c8-414e-8def-e32740a4d93a)
+![image](https://github.com/OleksandrMoroz24/cloudlinux_test_task/assets/140017557/1b894a78-a7d0-426c-ac3b-fee5c6007891)
+### perms command
+
+
+
