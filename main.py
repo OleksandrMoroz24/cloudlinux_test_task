@@ -100,7 +100,7 @@ def analyze_permissions(directory: str) -> None:
         for name in files + dirs:
             file_path = os.path.join(root, name)
             mode = os.stat(file_path).st_mode
-            if not (mode & 0o777 in [0o644, 0o755]):
+            if not (mode & 0o777 in [0o644, 0o755]):   # filtering permissions, usual permissions is 644 and 755
                 unusual_perms.append((file_path, oct(mode)[-3:]))
 
     # print files with unusual permissions
