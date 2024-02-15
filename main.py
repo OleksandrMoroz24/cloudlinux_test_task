@@ -2,14 +2,29 @@ import os
 from collections import defaultdict
 
 try:
-    import magic  # Використовуйте для визначення типу файлу, якщо доступно
+    import magic  # for inspecting type of files
 
     magic_available = True
 except ImportError:
-    magic_available = False  # magic не доступний, буде використано розширення файлу
+    magic_available = False  # magic not available, use file extension
 
 
-def scan_directory(directory, size_threshold, prefix=""):
+def scan_directory(
+        directory: str,
+        size_threshold: int,
+        prefix=""
+) -> tuple:
+    """
+        Recursively scans a directory, printing its structure and summarizing file types and sizes.
+
+        Args:
+            directory (str): The path to the directory to scan.
+            size_threshold (int): The size threshold in bytes for identifying large files.
+            prefix (str): A prefix used for indentation to represent the structure visually.
+
+        Returns:
+            tuple: A tuple containing the total size of files, a dictionary of file types with their counts and sizes, and a list of large files.
+    """
     print(f"{prefix}{'|-- ' if prefix else ''}{os.path.basename(directory)}/")
     next_prefix = prefix + "    "
     total_size = 0
@@ -52,7 +67,7 @@ def scan_directory(directory, size_threshold, prefix=""):
     except PermissionError:
         print(f"{next_prefix}Permission Denied.")
 
-    if prefix == "":  # Виведення підсумкової інформації лише для кореневої директорії
+    if prefix == "":  # Displaying summary information only for the root directory
         print("\nSummary:")
         print(f"Total size of files: {total_size} bytes")
         for file_type, info in file_types.items():
@@ -65,10 +80,20 @@ def scan_directory(directory, size_threshold, prefix=""):
             for path, size in large_files:
                 print(f"{path}: {size} bytes")
 
-    return total_size, file_types, large_files  # Повертаємо зібрану інформацію
+    return total_size, file_types, large_files  # return all collected information
 
 
-def analyze_permissions(directory):
+def analyze_permissions(directory: str) -> None:
+    """
+        Analyzes and prints files and directories within the given directory that have unusual permissions.
+
+        Unusual permissions are defined as not being either 644 or 755.
+
+        Args:
+            directory (str): The path to the directory to analyze for unusual permissions.
+
+        This function does not return anything but prints out the paths and permissions of files and directories with unusual permissions.
+    """
     unusual_perms = []
 
     for root, dirs, files in os.walk(directory):
@@ -78,7 +103,7 @@ def analyze_permissions(directory):
             if not (mode & 0o777 in [0o644, 0o755]):
                 unusual_perms.append((file_path, oct(mode)[-3:]))
 
-    # Виведення файлів з незвичайними дозволами
+    # print files with unusual permissions
     if unusual_perms:
         print("\nFiles and directories with unusual permissions:")
         for path, perms in unusual_perms:
@@ -86,6 +111,13 @@ def analyze_permissions(directory):
 
 
 def interactive_mode():
+    """
+    Provides an interactive command line interface for the user to choose between scanning a directory, analyzing file permissions, or exiting the program.
+
+    The user can specify the directory to scan or analyze and set a size threshold for identifying large files during the scan.
+
+    This function loops until the user chooses to exit.
+    """
     while True:
         command = input("\nEnter command (scan, perms, exit): ").strip().lower()
         if command == "exit":
