@@ -9,22 +9,24 @@ except ImportError:
     magic_available = False  # magic не доступний, буде використано розширення файлу
 
 
-def scan_directory(directory, size_threshold, prefix=''):
+def scan_directory(directory, size_threshold, prefix=""):
     print(f"{prefix}{'|-- ' if prefix else ''}{os.path.basename(directory)}/")
     next_prefix = prefix + "    "
     total_size = 0
-    file_types = defaultdict(lambda: {'count': 0, 'size': 0})
+    file_types = defaultdict(lambda: {"count": 0, "size": 0})
     large_files = []
 
     try:
         with os.scandir(directory) as it:
             for entry in it:
                 if entry.is_dir(follow_symlinks=False):
-                    dir_size, dir_file_types, dir_large_files = scan_directory(entry.path, size_threshold, next_prefix)
+                    dir_size, dir_file_types, dir_large_files = scan_directory(
+                        entry.path, size_threshold, next_prefix
+                    )
                     total_size += dir_size
                     for file_type, info in dir_file_types.items():
-                        file_types[file_type]['count'] += info['count']
-                        file_types[file_type]['size'] += info['size']
+                        file_types[file_type]["count"] += info["count"]
+                        file_types[file_type]["size"] += info["size"]
                     large_files.extend(dir_large_files)
                 else:
                     try:
@@ -35,10 +37,10 @@ def scan_directory(directory, size_threshold, prefix=''):
                             file_type = magic.from_file(entry.path, mime=True)
                         else:
                             _, ext = os.path.splitext(entry.name)
-                            file_type = ext.lower() or 'unknown'
+                            file_type = ext.lower() or "unknown"
 
-                        file_types[file_type]['count'] += 1
-                        file_types[file_type]['size'] += file_size
+                        file_types[file_type]["count"] += 1
+                        file_types[file_type]["size"] += file_size
 
                         if file_size > size_threshold:
                             large_files.append((entry.path, file_size))
@@ -50,11 +52,13 @@ def scan_directory(directory, size_threshold, prefix=''):
     except PermissionError:
         print(f"{next_prefix}Permission Denied.")
 
-    if prefix == '':  # Виведення підсумкової інформації лише для кореневої директорії
+    if prefix == "":  # Виведення підсумкової інформації лише для кореневої директорії
         print("\nSummary:")
         print(f"Total size of files: {total_size} bytes")
         for file_type, info in file_types.items():
-            print(f"Type: {file_type}, Count: {info['count']}, Size: {info['size']} bytes")
+            print(
+                f"Type: {file_type}, Count: {info['count']}, Size: {info['size']} bytes"
+            )
 
         if large_files:
             print("\nLarge files:")
@@ -95,7 +99,10 @@ def interactive_mode():
             if command == "scan":
                 try:
                     size_threshold = int(
-                        input("Enter size threshold for files in bytes (0 for no threshold): ").strip())
+                        input(
+                            "Enter size threshold for files in bytes (0 for no threshold): "
+                        ).strip()
+                    )
                 except ValueError:
                     print("Invalid size threshold, setting to 0")
                     size_threshold = 0
