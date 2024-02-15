@@ -105,6 +105,7 @@ This will return you to the global Python environment.
 ![image](https://github.com/OleksandrMoroz24/cloudlinux_test_task/assets/140017557/86ed064c-90c8-414e-8def-e32740a4d93a)
 ![image](https://github.com/OleksandrMoroz24/cloudlinux_test_task/assets/140017557/1b894a78-a7d0-426c-ac3b-fee5c6007891)
 ### perms command
+![image](https://github.com/OleksandrMoroz24/cloudlinux_test_task/assets/140017557/ab3bee64-1b8d-4f71-b9af-c5c489caf4e6)
 
 
 
